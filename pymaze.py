@@ -151,7 +151,6 @@ class labyrinthe(list):
                 y = nexty;
 
         values = [distance, x, y];
-        print distance
         return values;
 
 
