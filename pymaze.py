@@ -39,7 +39,17 @@ class labyrinthe(list):
         path = [pos]
         ref = [1,self.size[0],-1,-self.size[0]]
         while pos != exit:
-            if self[pos][ref.index(d)-1] == 0: d = ref[ref.index(d)-1]
+            for x in range( 0, 4 ):
+                if( self[pos][x] == 0 ):
+                    #calculate cost of going this direction
+                    cost = self.current_cost( self.index_xy_conversion( pos, self.size[0] ), x );
+                    #add cost and location to queue
+
+
+
+            #original code
+            if self[pos][ref.index(d)-1] == 0:
+                d = ref[ref.index(d)-1]
             if self[pos][ref.index(d)] == 0:
                 pos = pos+d
                 path.append(pos)
@@ -50,7 +60,7 @@ class labyrinthe(list):
         return path
 
     def index_xy_conversion( self, index, size ):
-        y = index // size;
+        y = index / size;
         x = index % size;
         return [ x, y ];
 
@@ -72,12 +82,30 @@ class labyrinthe(list):
     def current_cost( self, start, direction ):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
-        # use binaries for the direction
+        # use 0-3 for the direction
         # go that direction as long as the only "open" choices - the one going in "direction" and the direction you came from
         # keep count of the number of spaces you can move
         # return array of form: [ x, y, distance_travelled ]
         # where x and y are the ending coord of the movement
-        return [0,0,0];
+        distance = 0;
+        x = start[0];
+        y = start[1];
+
+        if direction == 0: #move right need [0,1,0,1]
+            test = 0;
+
+        if direction == 1: #move down  need [1,0,1,0]
+            test = 0;
+
+        if direction == 2: #move left  need [0,1,0,1]
+            test = 0;
+
+        if direction == 3: #move up    need [1,0,1,0]
+            test = 0;
+
+        values = [distance, x, y];
+
+        return values;
 
     def total_cost( self, start, goal, direction ):
         # start is current coord
@@ -130,7 +158,7 @@ if __name__ == '__main__':
             start += L.size[0]
         screen.fill(0xff0000,rectslist[start])
         display.flip()
-        if start == exit : print( 'YOU WIN'); break
+        if start == exit : print 'YOU WIN'; break
         if key.get_pressed()[K_ESCAPE]:
             for i in L.get_path(start,exit)[1:-1]:
                 screen.fill(0x0000ff,rectslist[i])
