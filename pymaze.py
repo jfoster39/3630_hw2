@@ -62,11 +62,15 @@ class labyrinthe(list):
 
                     destination_index = self.xy_index_conversion( destination );
  
+                    #TODO:
                     #add current_cost, heuristic_cost and location to queue
                     #queue is ordered by heuristic_cost
 
+            #TODO:
             #choose the action with the smallest cost
             #total_cost = current_cost of the action taken
+            #pos = chosen action
+            #path.append(pos)
 
             #original code
             if self[pos][ref.index(d)-1] == 0:
