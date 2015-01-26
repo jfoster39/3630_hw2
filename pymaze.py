@@ -66,9 +66,33 @@ class labyrinthe(list):
         x2 = coord2[0];
         y2 = coord2[1];
 
-        d = math.sqrt( (x2 - x1)**2 + (y2-y1)**2 );
-
+        d  = math.sqrt( (x2 - x1)**2 + (y2-y1)**2 );
         return d;
+ 
+    def current_cost( self, start, direction ):
+        # start is the coordinate that you are starting at
+        # direction is the direction that you are going
+        # use binaries for the direction
+        # go that direction as long as the only "open" choices - the one going in "direction" and the direction you came from
+        # keep count of the number of spaces you can move
+        # return array of form: [ x, y, distance_travelled ]
+        # where x and y are the ending coord of the movement
+        return [0,0,0];
+
+    def total_cost( self, start, goal, direction ):
+        # start is current coord
+        # goal is goal coord
+        # direction is the binary of the direction of travel
+
+        vals = self.current_cost( start, direction );
+ 
+        destination = [ vals[0], vals[1] ];
+        cost = vals[2];
+
+        distance = self.distance_between_coords( destination, goal );
+
+        total_cost = cost + distance;
+        return total_cost;
 
     def get_image_and_rects(self,cellulesize,wallcolor=(0,0,0),celcolor=(255,255,255)):
         x,y = cellulesize
