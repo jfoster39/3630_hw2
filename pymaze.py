@@ -42,7 +42,7 @@ class labyrinthe(list):
             for x in range( 0, 4 ):
                 if( self[pos][x] == 0 ):
                     #calculate cost of going this direction
-                    cost = self.current_cost( self.index_xy_conversion( pos, self.size[0] ), x );
+                    cost = self.current_cost( self.index_xy_conversion( pos ), x );
                     #add cost and location to queue
 
 
@@ -59,12 +59,14 @@ class labyrinthe(list):
             else: d = ref[ref.index(d)-3]
         return path
 
-    def index_xy_conversion( self, index, size ):
+    def index_xy_conversion( self, index ):
+        size = self.size[0];
         y = index / size;
         x = index % size;
         return [ x, y ];
 
-    def xy_index_conversion( self, coords, size ):
+    def xy_index_conversion( self, coords ):
+        size = self.size[0];
         y = coords[1] * size;
         x = coords[0];
         return y + x;
@@ -88,23 +90,50 @@ class labyrinthe(list):
         # return array of form: [ x, y, distance_travelled ]
         # where x and y are the ending coord of the movement
         distance = 0;
+        req = [1,1,1,1];
         x = start[0];
         y = start[1];
+        keep_moving = 1;
 
-        if direction == 0: #move right need [0,1,0,1]
-            test = 0;
+        while( keep_moving ):
+            if direction == 0: #move right
+                if( x > 49 ):
+                    break;
+                req = [0,1,0,1];
+                nextx = x+1;
+                nexty = y;
 
-        if direction == 1: #move down  need [1,0,1,0]
-            test = 0;
+            elif direction == 1: #move down
+                if( y > 49 ):
+                    break;
+                req = [1,0,1,0];
+                nextx = x;
+                nexty = y+1;
 
-        if direction == 2: #move left  need [0,1,0,1]
-            test = 0;
+            elif direction == 2: #move left
+                if( x < 0 ):
+                    break;
+                req = [0,1,0,1];
+                nextx = x-1;
+                nexty = y;
 
-        if direction == 3: #move up    need [1,0,1,0]
-            test = 0;
+            elif direction == 3: #move up
+                if( y < 50 ):
+                    break;
+                req = [1,0,1,0];
+                nextx = x;
+                nexty = y-1;
+
+            next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+
+            if( next_set != req ):
+                keep_moving = 0;
+            else:
+                distance = distance + 1;
+                x = nextx;
+                y = nexty;
 
         values = [distance, x, y];
-
         return values;
 
     def total_cost( self, start, goal, direction ):
