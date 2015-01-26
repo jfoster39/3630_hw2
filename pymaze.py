@@ -42,9 +42,8 @@ class labyrinthe(list):
             for x in range( 0, 4 ):
                 if( self[pos][x] == 0 ):
                     #calculate cost of going this direction
-                    cost = self.current_cost( self.index_xy_conversion( pos ), x );
+                    cost = self.total_cost( pos, exit, x );
                     #add cost and location to queue
-
 
 
             #original code
@@ -137,9 +136,12 @@ class labyrinthe(list):
         return values;
 
     def total_cost( self, start, goal, direction ):
-        # start is current coord
-        # goal is goal coord
+        # start is current index
+        # goal is goal index
         # direction is the binary of the direction of travel
+
+        start = self.index_xy_conversion( start );
+        goal  = self.index_xy_conversion( goal  );
 
         vals = self.current_cost( start, direction );
  
