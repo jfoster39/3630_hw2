@@ -118,7 +118,7 @@ class labyrinthe(list):
                 nexty = y;
 
             elif direction == 3: #move up
-                if( y < 50 ):
+                if( y < 0 ):
                     break;
                 req = [1,0,1,0];
                 nextx = x;
