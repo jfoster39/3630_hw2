@@ -38,8 +38,8 @@ class labyrinthe(list):
         d = 1
         path = [pos]
         ref = [1,self.size[0],-1,-self.size[0]]
-        total_cost = 0;
-        current_cost = 0;
+        total_cost = 0; #total cost is the total cost of getting to pos
+        current_cost = 0; #current cost is the cost of pos + current action
         while pos != exit:
             for x in range( 0, 4 ):
                 if( self[pos][x] == 0 ):
@@ -60,9 +60,11 @@ class labyrinthe(list):
                     #add current cost and distance
                     heuristic_cost = current_cost + distance;
  
-                    #add cost and location to queue
+                    #add current_cost, heuristic_cost and location to queue
+                    #queue is ordered by heuristic_cost
 
-
+            #choose the action with the smallest cost
+            #total_cost = current_cost of the action taken
 
             #original code
             if self[pos][ref.index(d)-1] == 0:
@@ -102,7 +104,8 @@ class labyrinthe(list):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
         # use 0-3 for the direction
-        # go that direction as long as the only "open" choices - the one going in "direction" and the direction you came from
+        # go that direction as long as the only "open" choices are the ones 
+        # going in the specified "direction" and the direction you came from
         # keep count of the number of spaces you can move
         # return array of form: [ x, y, distance_travelled ]
         # where x and y are the ending coord of the movement
