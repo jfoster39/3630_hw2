@@ -38,12 +38,30 @@ class labyrinthe(list):
         d = 1
         path = [pos]
         ref = [1,self.size[0],-1,-self.size[0]]
+        total_cost = 0;
+        current_cost = 0;
         while pos != exit:
             for x in range( 0, 4 ):
                 if( self[pos][x] == 0 ):
+                    pos_coord  = self.index_xy_conversion( pos  );
+                    exit_coord = self.index_xy_conversion( exit );
+
                     #calculate cost of going this direction
-                    cost = self.total_cost( pos, exit, x );
+                    vals = self.action_cost( pos_coord, x );
+                    destination = [ vals[0], vals[1] ];
+                    action_cost = vals[2];
+
+                    #calculate distance
+                    distance = self.distance_between_coords( destination, exit_coord );
+
+                    #add action cost to previous total cost
+                    current_cost = total_cost + action_cost;
+
+                    #add current cost and distance
+                    heuristic_cost = current_cost + distance;
+ 
                     #add cost and location to queue
+
 
 
             #original code
@@ -80,7 +98,7 @@ class labyrinthe(list):
         d  = math.sqrt( (x2 - x1)**2 + (y2-y1)**2 );
         return d;
  
-    def current_cost( self, start, direction ):
+    def action_cost( self, start, direction ):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
         # use 0-3 for the direction
@@ -133,25 +151,9 @@ class labyrinthe(list):
                 y = nexty;
 
         values = [distance, x, y];
+        print distance
         return values;
 
-    def total_cost( self, start, goal, direction ):
-        # start is current index
-        # goal is goal index
-        # direction is the binary of the direction of travel
-
-        start = self.index_xy_conversion( start );
-        goal  = self.index_xy_conversion( goal  );
-
-        vals = self.current_cost( start, direction );
- 
-        destination = [ vals[0], vals[1] ];
-        cost = vals[2];
-
-        distance = self.distance_between_coords( destination, goal );
-
-        total_cost = cost + distance;
-        return total_cost;
 
     def get_image_and_rects(self,cellulesize,wallcolor=(0,0,0),celcolor=(255,255,255)):
         x,y = cellulesize
