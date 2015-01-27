@@ -101,32 +101,32 @@ class labyrinthe(list):
 
         while( keep_moving ):
             if direction == 0: #move right
-                if( x > 49 ):
-                    break;
                 req = [0,1,0,1];
                 nextx = x+1;
                 nexty = y;
+                if( x > 49 ):
+                    break;
 
             elif direction == 1: #move down
-                if( y > 49 ):
-                    break;
                 req = [1,0,1,0];
                 nextx = x;
                 nexty = y+1;
+                if( y > 49 ):
+                    break;
 
             elif direction == 2: #move left
-                if( x < 0 ):
-                    break;
                 req = [0,1,0,1];
                 nextx = x-1;
                 nexty = y;
+                if( x < 0 ):
+                    break;
 
             elif direction == 3: #move up
-                if( y < 0 ):
-                    break;
                 req = [1,0,1,0];
                 nextx = x;
                 nexty = y-1;
+                if( y < 0 ):
+                    break;
 
             next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
 
