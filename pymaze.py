@@ -104,13 +104,14 @@ class labyrinthe(list):
         return path
         """
     def get_next_position( self, pos, next_move ) :
-        if not self[pos][next_move]:
+        #pdb.set_trace()
+        if next_move == 0 :
             return 1
-        if not self[pos][next_move]:
+        if next_move == 2 :
             return -1
-        if not self[pos][next_move]:
+        if next_move == 3 :
             return -self.size[1]
-        if not self[pos][next_move]:
+        if next_move == 1 :
             return self.size[0]
 
     def action_cost( self, start, direction ):
