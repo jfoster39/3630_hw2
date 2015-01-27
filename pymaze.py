@@ -44,11 +44,13 @@ class labyrinthe(list):
         current_cost = 0; #current cost is the cost of pos + current action
         visited = set()
         frontier = PriorityQueue() #queue used for storing successors of current location
-        frontier.put( ( 0, pos ) )
+        frontier.put( ( 0, pos ) ) # need to add a tuple to PQ where first entry is total functions cost
+
         while frontier.empty != False :
             pos_node = frontier.get()
             pos = pos_node[1]
             total_cost = pos_node[0]
+
             if pos == exit :
                 return path
             elif pos in visited :
@@ -78,19 +80,15 @@ class labyrinthe(list):
 
                     #add current_cost, heuristic_cost and location to queue
                     #queue is ordered by lowest heuristic_cos
+                    #next_move is the value of x which corresponds to a valid move
                     next_move = x
                     next_pos += self.get_next_position( pos, next_move )
                     frontier.put( ( heuristic_cost, next_pos ) )
             #pdb.set_trace()
 
+            #add pos to visited and append to path for output
             visited.add( pos )
             path.append( pos )
-
-            #TODO:
-            #choose the action with the smallest cost
-            #total_cost = current_cost of the action taken
-            #pos = chosen action
-            #path.append(pos)
 
             #original code
             """
@@ -106,16 +104,14 @@ class labyrinthe(list):
         return path
         """
     def get_next_position( self, pos, next_move ) :
-        increment_value = 0
         if not self[pos][next_move]:
-            increment_value = 1
+            return 1
         if not self[pos][next_move]:
-            increment_value = -1
+            return -1
         if not self[pos][next_move]:
-            increment_value = -self.size[1]
+            return -self.size[1]
         if not self[pos][next_move]:
-            increment_value = self.size[0]
-        return increment_value
+            return self.size[0]
 
     def action_cost( self, start, direction ):
         # start is the coordinate that you are starting at
