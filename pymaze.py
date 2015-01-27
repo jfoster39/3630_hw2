@@ -110,34 +110,6 @@ class labyrinthe(list):
             all_path.append( pos );
             prev_path.append( [pos, prev_node] );
 
-    def fill_in_path( self, path ):
-        for i in range(0,len(path)-1 ):
-            #draw from one node to next for path
-            a = self.index_xy_conversion( path[i] );
-            b = self.index_xy_conversion( path[i+1] );
-
-            #fill in between a and b
-            if( a[0] < b[0] ): #drawing right
-                diff = b[0] - a[0] ;
-                for j in range(1, diff+1):
-                    path.append( self.xy_index_conversion( [a[0]+j, a[1]] ) );
-
-            elif( a[0] > b[0] ): #drawing left
-                diff = a[0] - b[0];
-                for j in range(1, diff+1):
-                    path.append( self.xy_index_conversion( [a[0]-j, a[1]] ) );
-
-            elif( a[1] < b[1] ): #drawing down
-                diff = b[1] - a[1] ;
-                for j in range(1, diff+1):
-                    path.append( self.xy_index_conversion( [a[0], a[1]+j] ) );
-
-            elif( a[1] > b[1] ): #drawing up
-                diff = a[1] - b[1];
-                for j in range(1, diff+1):
-                    path.append( self.xy_index_conversion( [a[0], a[1]-j] ) );
-        return path;
-
     def action_cost( self, start, direction, goal ):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
@@ -235,6 +207,44 @@ class labyrinthe(list):
         values = [x, y, distance];
         return values;
 
+    def distance_between_coords( self, coord1, coord2 ):
+        import math;
+        x1 = coord1[0];
+        y1 = coord1[1];
+        x2 = coord2[0];
+        y2 = coord2[1];
+
+        d  = math.sqrt( (x2 - x1)**2 + (y2-y1)**2 );
+        return d;
+
+    def fill_in_path( self, path ):
+        for i in range(0,len(path)-1 ):
+            #draw from one node to next for path
+            a = self.index_xy_conversion( path[i] );
+            b = self.index_xy_conversion( path[i+1] );
+
+            #fill in between a and b
+            if( a[0] < b[0] ): #drawing right
+                diff = b[0] - a[0] ;
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0]+j, a[1]] ) );
+
+            elif( a[0] > b[0] ): #drawing left
+                diff = a[0] - b[0];
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0]-j, a[1]] ) );
+
+            elif( a[1] < b[1] ): #drawing down
+                diff = b[1] - a[1] ;
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0], a[1]+j] ) );
+
+            elif( a[1] > b[1] ): #drawing up
+                diff = a[1] - b[1];
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0], a[1]-j] ) );
+        return path;
+
     def index_xy_conversion( self, index ):
         size = self.size[0];
         y = index / size;
@@ -246,16 +256,6 @@ class labyrinthe(list):
         y = coords[1] * size;
         x = coords[0];
         return y + x;
-
-    def distance_between_coords( self, coord1, coord2 ):
-        import math;
-        x1 = coord1[0];
-        y1 = coord1[1];
-        x2 = coord2[0];
-        y2 = coord2[1];
-
-        d  = math.sqrt( (x2 - x1)**2 + (y2-y1)**2 );
-        return d;
 
     def get_image_and_rects(self,cellulesize,wallcolor=(0,0,0),celcolor=(255,255,255)):
         x,y = cellulesize
