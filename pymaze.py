@@ -41,13 +41,13 @@ class labyrinthe(list):
         current_cost = 0; #current cost is the cost of pos + current action
         visited = set()
         frontier = PriorityQueue() #queue used for storing successors of current location
-        frontier.put( ( 0, pos ) ) # need to add a tuple to PQ where first entry is total functions cost
+        frontier.put( ( 0, pos, 0 ) ) # need to add a tuple to PQ where first entry is total functions cost
 
         while frontier.empty != False :
             pos_node = frontier.get()
 
             pos = pos_node[1]
-            total_cost = pos_node[0]
+            total_cost = pos_node[2]
 
             if pos == exit :
                 return path
@@ -75,9 +75,9 @@ class labyrinthe(list):
 
                     destination_index = self.xy_index_conversion( destination );
 
-                    #add current_cost, heuristic_cost and location to queue
+                    #add heuristic_cost, destination and current_cost to queue
                     #queue is ordered by lowest heuristic_cos
-                    frontier.put( ( heuristic_cost, destination_index ) )
+                    frontier.put( ( heuristic_cost, destination_index, current_cost ) )
 
             #add pos to visited and append to path for output
             visited.add( pos )
