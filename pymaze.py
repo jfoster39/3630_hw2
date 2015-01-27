@@ -109,6 +109,15 @@ class labyrinthe(list):
             all_path.append( pos );
             prev_path.append( [pos, prev_node] );
 
+    def create_path( self, path ):
+        for i in range(0,len(path)-1 ):
+            #draw from one node to next for path
+            a = index_xy_conversion( i );
+            b = index_xy_conversion( i+1 );
+
+            #fill in between a and b
+        return path;
+
     def action_cost( self, start, direction, goal ):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
