@@ -60,7 +60,7 @@ class labyrinthe(list):
                     exit_coord = self.index_xy_conversion( exit );
 
                     #calculate cost of going this direction
-                    vals = self.action_cost( pos_coord, x );
+                    vals = self.action_cost( pos_coord, x, exit );
                     destination = [ vals[0], vals[1] ];
                     action_cost = vals[2];
 
@@ -83,7 +83,7 @@ class labyrinthe(list):
             visited.add( pos )
             path.append( pos )
 
-    def action_cost( self, start, direction ):
+    def action_cost( self, start, direction, goal ):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
         # use 0-3 for the direction
@@ -105,37 +105,66 @@ class labyrinthe(list):
                 if( x > 49 ):
                     break;
                 req = [0,1,0,1];
-                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+
+                next_pos = self.xy_index_conversion( [nextx,nexty] );
+                if( next_pos == goal ):
+                    x = nextx;
+                    y = nexty;
+                    distance = distance + 1;
+                    break;
+
+                next_set = self[ next_pos ];
                 if( next_set == [1,1,0,1] ):
                     return [ nextx, nexty, float( "inf" ) ];
-
             elif direction == 1: #move down
                 nextx = x;
                 nexty = y+1;
                 if( y > 49 ):
                     break;
                 req = [1,0,1,0];
-                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+
+                next_pos = self.xy_index_conversion( [nextx,nexty] );
+                if( next_pos == goal ):
+                    x = nextx;
+                    y = nexty;
+                    distance = distance + 1;
+                    break;
+
+                next_set = self[ next_pos ];
                 if( next_set == [1,1,1,0] ):
                     return [ nextx, nexty, float( "inf" ) ];
-
             elif direction == 2: #move left
                 nextx = x-1;
                 nexty = y;
                 if( x < 0 ):
                     break;
                 req = [0,1,0,1];
-                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+
+                next_pos = self.xy_index_conversion( [nextx,nexty] );
+                if( next_pos == goal ):
+                    x = nextx;
+                    y = nexty;
+                    distance = distance + 1;
+                    break;
+
+                next_set = self[ next_pos ];
                 if( next_set == [0,1,1,1] ):
                     return [ nextx, nexty, float( "inf" ) ];
-
             elif direction == 3: #move up
                 nextx = x;
                 nexty = y-1;
                 if( y < 0 ):
                     break;
                 req = [1,0,1,0];
-                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+
+                next_pos = self.xy_index_conversion( [nextx,nexty] );
+                if( next_pos == goal ):
+                    x = nextx;
+                    y = nexty;
+                    distance = distance + 1;
+                    break;
+
+                next_set = self[ next_pos ];
                 if( next_set == [1,0,1,1] ):
                     return [ nextx, nexty, float( "inf" ) ];
             else:
