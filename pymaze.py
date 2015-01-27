@@ -101,36 +101,46 @@ class labyrinthe(list):
 
         while( keep_moving ):
             if direction == 0: #move right
-                req = [0,1,0,1];
                 nextx = x+1;
                 nexty = y;
                 if( x > 49 ):
                     break;
+                req = [0,1,0,1];
+                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+                if( next_set == [1,1,0,1] ):
+                    return [ nextx, nexty, float( "inf" ) ];
 
             elif direction == 1: #move down
-                req = [1,0,1,0];
                 nextx = x;
                 nexty = y+1;
                 if( y > 49 ):
                     break;
+                req = [1,0,1,0];
+                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+                if( next_set == [1,1,1,0] ):
+                    return [ nextx, nexty, float( "inf" ) ];
 
             elif direction == 2: #move left
-                req = [0,1,0,1];
                 nextx = x-1;
                 nexty = y;
                 if( x < 0 ):
                     break;
+                req = [0,1,0,1];
+                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+                if( next_set == [0,1,1,1] ):
+                    return [ nextx, nexty, float( "inf" ) ];
 
             elif direction == 3: #move up
-                req = [1,0,1,0];
                 nextx = x;
                 nexty = y-1;
                 if( y < 0 ):
                     break;
+                req = [1,0,1,0];
+                next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
+                if( next_set == [1,0,1,1] ):
+                    return [ nextx, nexty, float( "inf" ) ];
             else:
                 break;
-
-            next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
 
             if( next_set != req ):
                 keep_moving = 0;
