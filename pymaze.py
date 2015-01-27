@@ -36,25 +36,48 @@ class labyrinthe(list):
 
     def get_path(self,start,exit):
         pos = start
-        path = [pos]
+        all_path = [] #all nodes in paths
+        prev_path = [] #lists nodes in paths and their previous nodes
         total_cost = 0; #total cost is the total cost of getting to pos
         current_cost = 0; #current cost is the cost of pos + current action
         visited = set()
         frontier = PriorityQueue() #queue used for storing successors of current location
-        frontier.put( ( 0, pos, 0 ) ) # need to add a tuple to PQ where first entry is total functions cost
+        #queue items: [heuristic_cost + cost to node, current node, cost to node, and prev node]
+        frontier.put( ( 0, pos, 0, -1 ) ) # add first entry to PQ
 
         while frontier.empty != False :
             pos_node = frontier.get()
-
             pos = pos_node[1]
             total_cost = pos_node[2]
+            prev_node = pos_node[3]
 
             if pos == exit :
-                return path
+                #path found
+                #add exit to path
+                all_path.append( pos );
+                prev_path.append( [pos, prev_node] );
+
+                #reconstruct shortest path
+                path = [pos];
+                current = prev_node;
+
+                while( current != start ):
+                    #find index of current
+                    i = all_path.index(current);
+                    #find previous node
+                    prev = prev_path[i][1];
+
+                    #add current to path
+                    path.append( current );
+                    current = prev;
+                return path;
+
             elif pos in visited :
+                #skip already visited
                 continue
 
             for x in range( 0, 4 ):
+                #check all 4 directions
                 if( self[pos][x] == 0 ):
                     pos_coord  = self.index_xy_conversion( pos  );
                     exit_coord = self.index_xy_conversion( exit );
@@ -75,13 +98,16 @@ class labyrinthe(list):
 
                     destination_index = self.xy_index_conversion( destination );
 
-                    #add heuristic_cost, destination and current_cost to queue
+                    #add heuristic_cost, destination, current_cost, and prev node to queue
                     #queue is ordered by lowest heuristic_cos
-                    frontier.put( ( heuristic_cost, destination_index, current_cost ) )
+                    frontier.put( ( heuristic_cost, destination_index, current_cost, pos ) )
 
-            #add pos to visited and append to path for output
+            #add pos to visited to prevent duplicates
             visited.add( pos )
-            path.append( pos )
+
+            # append to paths for path reconstruction
+            all_path.append( pos );
+            prev_path.append( [pos, prev_node] );
 
     def action_cost( self, start, direction, goal ):
         # start is the coordinate that you are starting at
