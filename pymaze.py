@@ -1,6 +1,8 @@
 from pygame import*
 quit
 import random
+from Queue import *
+import pdb
 
 class labyrinthe(list):
     ''
@@ -40,9 +42,21 @@ class labyrinthe(list):
         ref = [1,self.size[0],-1,-self.size[0]]
         total_cost = 0; #total cost is the total cost of getting to pos
         current_cost = 0; #current cost is the cost of pos + current action
-        while pos != exit:
+        visited = set()
+        frontier = PriorityQueue() #queue used for storing successors of current location
+        frontier.put( ( 0, pos ) )
+        while frontier.empty != False :
+            pos_node = frontier.get()
+            pos = pos_node[1]
+            total_cost = pos_node[0]
+            if pos == exit :
+                return path
+            elif pos in visited :
+                continue
+
             for x in range( 0, 4 ):
                 if( self[pos][x] == 0 ):
+                    next_pos = pos
                     pos_coord  = self.index_xy_conversion( pos  );
                     exit_coord = self.index_xy_conversion( exit );
 
@@ -61,10 +75,16 @@ class labyrinthe(list):
                     heuristic_cost = current_cost + distance;
 
                     destination_index = self.xy_index_conversion( destination );
- 
-                    #TODO:
+
                     #add current_cost, heuristic_cost and location to queue
-                    #queue is ordered by heuristic_cost
+                    #queue is ordered by lowest heuristic_cos
+                    next_move = x
+                    next_pos += self.get_next_position( pos, next_move )
+                    frontier.put( ( heuristic_cost, next_pos ) )
+            #pdb.set_trace()
+
+            visited.add( pos )
+            path.append( pos )
 
             #TODO:
             #choose the action with the smallest cost
@@ -73,6 +93,7 @@ class labyrinthe(list):
             #path.append(pos)
 
             #original code
+            """
             if self[pos][ref.index(d)-1] == 0:
                 d = ref[ref.index(d)-1]
             if self[pos][ref.index(d)] == 0:
@@ -83,12 +104,24 @@ class labyrinthe(list):
                     del(path[i:-1])
             else: d = ref[ref.index(d)-3]
         return path
+        """
+    def get_next_position( self, pos, next_move ) :
+        increment_value = 0
+        if not self[pos][next_move]:
+            increment_value = 1
+        if not self[pos][next_move]:
+            increment_value = -1
+        if not self[pos][next_move]:
+            increment_value = -self.size[1]
+        if not self[pos][next_move]:
+            increment_value = self.size[0]
+        return increment_value
 
     def action_cost( self, start, direction ):
         # start is the coordinate that you are starting at
         # direction is the direction that you are going
         # use 0-3 for the direction
-        # go that direction as long as the only "open" choices are the ones 
+        # go that direction as long as the only "open" choices are the ones
         # going in the specified "direction" and the direction you came from
         # keep count of the number of spaces you can move
         # return array of form: [ x, y, distance_travelled ]
