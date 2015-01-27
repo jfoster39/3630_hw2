@@ -127,6 +127,8 @@ class labyrinthe(list):
                 nexty = y-1;
                 if( y < 0 ):
                     break;
+            else:
+                break;
 
             next_set = self[ self.xy_index_conversion( [nextx,nexty] )];
 
@@ -204,3 +206,31 @@ if __name__ == '__main__':
                 screen.fill(0x0000ff,rectslist[i])
                 display.update(rectslist[i])
                 time.wait(20)
+        if key.get_pressed()[K_SPACE]:
+            import time;
+            total_time = 0;
+            total_CR = 0;
+
+            for i in range(0,100):
+                X = labyrinthe((50,50));
+                test_start = random.randrange(len(X))
+                test_exit = random.randrange(len(X))
+
+                start_time = time.time();
+                test_path = X.get_path( test_start, test_exit );
+                stop_time = time.time();
+                time_diff = stop_time - start_time;
+
+                distance_traveled = len( test_path );
+                start_coord = X.index_xy_conversion( test_start );
+                exit_coord  = X.index_xy_conversion( test_exit  );
+                distance = X.distance_between_coords( start_coord, exit_coord );
+                CR = distance_traveled / distance;
+
+                total_time = total_time + time_diff;
+                total_CR = total_CR + CR;
+
+            average_time = total_time / 100.0;
+            average_CR = total_CR / 100.0;
+            print average_time;
+            print total_time;
