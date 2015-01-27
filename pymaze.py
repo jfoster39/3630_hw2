@@ -2,7 +2,6 @@ from pygame import*
 quit
 import random
 from Queue import *
-import pdb
 
 class labyrinthe(list):
     ''
@@ -37,9 +36,7 @@ class labyrinthe(list):
 
     def get_path(self,start,exit):
         pos = start
-        d = 1
         path = [pos]
-        ref = [1,self.size[0],-1,-self.size[0]]
         total_cost = 0; #total cost is the total cost of getting to pos
         current_cost = 0; #current cost is the cost of pos + current action
         visited = set()
@@ -48,6 +45,7 @@ class labyrinthe(list):
 
         while frontier.empty != False :
             pos_node = frontier.get()
+
             pos = pos_node[1]
             total_cost = pos_node[0]
 
@@ -81,30 +79,15 @@ class labyrinthe(list):
                     #add current_cost, heuristic_cost and location to queue
                     #queue is ordered by lowest heuristic_cos
                     #next_move is the value of x which corresponds to a valid move
-                    next_move = x
-                    next_pos += self.get_next_position( pos, next_move )
-                    frontier.put( ( heuristic_cost, next_pos ) )
-            #pdb.set_trace()
+                    #next_move = x
+                    #next_pos += self.get_next_position( pos, next_move )
+                    frontier.put( ( heuristic_cost, destination_index ) )
 
             #add pos to visited and append to path for output
             visited.add( pos )
             path.append( pos )
 
-            #original code
-            """
-            if self[pos][ref.index(d)-1] == 0:
-                d = ref[ref.index(d)-1]
-            if self[pos][ref.index(d)] == 0:
-                pos = pos+d
-                path.append(pos)
-                i = path.index(pos)
-                if i != len(path)-1:
-                    del(path[i:-1])
-            else: d = ref[ref.index(d)-3]
-        return path
-        """
     def get_next_position( self, pos, next_move ) :
-        #pdb.set_trace()
         if next_move == 0 :
             return 1
         if next_move == 2 :
@@ -172,14 +155,14 @@ class labyrinthe(list):
             else:
                 break;
 
+            x = nextx;
+            y = nexty;
+            distance = distance + 1;
+
             if( next_set != req ):
                 keep_moving = 0;
-            else:
-                distance = distance + 1;
-                x = nextx;
-                y = nexty;
 
-        values = [distance, x, y];
+        values = [x, y, distance];
         return values;
 
     def index_xy_conversion( self, index ):
