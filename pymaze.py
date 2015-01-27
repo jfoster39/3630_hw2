@@ -56,7 +56,6 @@ class labyrinthe(list):
 
             for x in range( 0, 4 ):
                 if( self[pos][x] == 0 ):
-                    next_pos = pos
                     pos_coord  = self.index_xy_conversion( pos  );
                     exit_coord = self.index_xy_conversion( exit );
 
@@ -78,24 +77,11 @@ class labyrinthe(list):
 
                     #add current_cost, heuristic_cost and location to queue
                     #queue is ordered by lowest heuristic_cos
-                    #next_move is the value of x which corresponds to a valid move
-                    #next_move = x
-                    #next_pos += self.get_next_position( pos, next_move )
                     frontier.put( ( heuristic_cost, destination_index ) )
 
             #add pos to visited and append to path for output
             visited.add( pos )
             path.append( pos )
-
-    def get_next_position( self, pos, next_move ) :
-        if next_move == 0 :
-            return 1
-        if next_move == 2 :
-            return -1
-        if next_move == 3 :
-            return -self.size[1]
-        if next_move == 1 :
-            return self.size[0]
 
     def action_cost( self, start, direction ):
         # start is the coordinate that you are starting at
