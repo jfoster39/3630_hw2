@@ -70,7 +70,8 @@ class labyrinthe(list):
                     #add current to path
                     path.append( current );
                     current = prev;
-                return path;
+                filled_path = self.fill_in_path( path );
+                return filled_path;
 
             elif pos in visited :
                 #skip already visited
@@ -109,13 +110,32 @@ class labyrinthe(list):
             all_path.append( pos );
             prev_path.append( [pos, prev_node] );
 
-    def create_path( self, path ):
+    def fill_in_path( self, path ):
         for i in range(0,len(path)-1 ):
             #draw from one node to next for path
-            a = index_xy_conversion( i );
-            b = index_xy_conversion( i+1 );
+            a = self.index_xy_conversion( path[i] );
+            b = self.index_xy_conversion( path[i+1] );
 
             #fill in between a and b
+            if( a[0] < b[0] ): #drawing right
+                diff = b[0] - a[0] ;
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0]+j, a[1]] ) );
+
+            elif( a[0] > b[0] ): #drawing left
+                diff = a[0] - b[0];
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0]-j, a[1]] ) );
+
+            elif( a[1] < b[1] ): #drawing down
+                diff = b[1] - a[1] ;
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0], a[1]+j] ) );
+
+            elif( a[1] > b[1] ): #drawing up
+                diff = a[1] - b[1];
+                for j in range(1, diff+1):
+                    path.append( self.xy_index_conversion( [a[0], a[1]-j] ) );
         return path;
 
     def action_cost( self, start, direction, goal ):
